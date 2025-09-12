@@ -60,8 +60,13 @@ char	*build_and_check(char **argv, int cmd_index, char **envp)
 
 	paths = get_path(envp);
 	cmd = cmd_split(argv, cmd_index);
+
 	if (!paths || !cmd || !cmd[0])
+	{
+		free_split(cmd);
+		free_split(paths);
 		return (NULL);
+	}
 	result = try_paths_for_cmd(paths, cmd);
 	if (!result)
 		ft_putstr_fd(": command not found\n", 2);
@@ -69,4 +74,5 @@ char	*build_and_check(char **argv, int cmd_index, char **envp)
 	free_split(paths);
 	return (result);
 }
+
 
