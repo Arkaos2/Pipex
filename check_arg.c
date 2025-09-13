@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_arg.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/13 17:21:08 by saibelab          #+#    #+#             */
+/*   Updated: 2025/09/13 17:21:08 by saibelab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 char	**cmd_split(char **argv, int i)
@@ -39,11 +51,11 @@ char	*try_paths_for_cmd(char **paths, char **cmd)
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (!tmp)
-			break;
+			break ;
 		correct = ft_strjoin(tmp, cmd[0]);
 		free(tmp);
 		if (!correct)
-			break;
+			break ;
 		if (access(correct, X_OK) == 0)
 			return (correct);
 		free(correct);
@@ -60,7 +72,6 @@ char	*build_and_check(char **argv, int cmd_index, char **envp)
 
 	paths = get_path(envp);
 	cmd = cmd_split(argv, cmd_index);
-
 	if (!paths || !cmd || !cmd[0])
 	{
 		free_split(cmd);
@@ -75,4 +86,10 @@ char	*build_and_check(char **argv, int cmd_index, char **envp)
 	return (result);
 }
 
-
+void	free_cmd(t_exec *cmd)
+{
+	if (cmd->cmd_path)
+		free(cmd->cmd_path);
+	if (cmd->cmd_args)
+		free_split(cmd->cmd_args);
+}

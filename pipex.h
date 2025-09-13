@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/13 17:42:36 by saibelab          #+#    #+#             */
+/*   Updated: 2025/09/13 17:42:36 by saibelab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PIPEX_H
 # define PIPEX_H
 
@@ -28,5 +40,7 @@ char	*build_and_check(char **argv, int cmd_index, char **envp);
 
 void	fork_cmd_child(t_exec *cmd, char **envp);
 void	exec_child(t_exec *cmd, char **envp);
+
+int		open_files(char **argv, int *fd_in, int *fd_out);
 
 #endif
