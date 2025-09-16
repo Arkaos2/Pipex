@@ -1,6 +1,6 @@
 NAME = pipex
 
-SRCS = main.c check_arg.c child.c
+SRCS = main.c check_arg.c child.c pipex_bonus.c pipes.c
 OBJS = $(SRCS:.c=.o)
 
 LIBFT_DIR = libft

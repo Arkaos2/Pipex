@@ -26,18 +26,22 @@ char	**get_path(char **envp)
 {
 	int		i;
 	char	*path_value;
-	char	**path;
+	char	**paths;
 
+	if (!envp)
+		return (NULL);
 	i = 0;
-	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5))
+	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
 		i++;
 	if (!envp[i])
 		return (NULL);
 	path_value = envp[i] + 5;
-	path = ft_split(path_value, ':');
-	if (!path)
+	if (!path_value || path_value[0] == '\0')
 		return (NULL);
-	return (path);
+	paths = ft_split(path_value, ':');
+	if (!paths)
+		return (NULL);
+	return (paths);
 }
 
 char	*try_paths_for_cmd(char **paths, char **cmd)
@@ -69,7 +73,13 @@ char	*build_and_check(char **argv, int cmd_index, char **envp)
 	char	**paths;
 	char	**cmd;
 	char	*result;
+	int i;
 
+	if (!argv[cmd_index] || argv[cmd_index][0] == '\0')
+	{
+   		ft_putstr_fd("Erreur : commande vide\n", 2);
+   	 	return NULL;
+	}
 	paths = get_path(envp);
 	cmd = cmd_split(argv, cmd_index);
 	if (!paths || !cmd || !cmd[0])
@@ -78,6 +88,8 @@ char	*build_and_check(char **argv, int cmd_index, char **envp)
 		free_split(paths);
 		return (NULL);
 	}
+	for (i = 0; cmd[i]; i++)
+		ft_printf("cmd[%d]: %s\n", i, cmd[i]);
 	result = try_paths_for_cmd(paths, cmd);
 	if (!result)
 		ft_putstr_fd(": command not found\n", 2);
@@ -86,10 +98,4 @@ char	*build_and_check(char **argv, int cmd_index, char **envp)
 	return (result);
 }
 
-void	free_cmd(t_exec *cmd)
-{
-	if (cmd->cmd_path)
-		free(cmd->cmd_path);
-	if (cmd->cmd_args)
-		free_split(cmd->cmd_args);
-}
+
