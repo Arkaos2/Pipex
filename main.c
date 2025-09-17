@@ -1,12 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/17 16:38:33 by saibelab          #+#    #+#             */
+/*   Updated: 2025/09/17 16:38:33 by saibelab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 int	open_infile_outfile(char **argv, int argc, int *fd_in, int *fd_out)
 {
-	if (ft_strncmp(argv[1], argv[argc - 1], ft_strlen(argv[argc - 1]) + 1) == 0)
-	{
-		ft_putstr_fd("Error: input file is also the output\n", 2);
-		return (1);
-	}
 	*fd_in = open(argv[1], O_RDONLY);
 	if (*fd_in < 0)
 	{
@@ -50,8 +57,8 @@ t_exec	*prepare_exec(char **argv, int argc)
 	t_exec	*cmd;
 	int		start;
 
-		cmd = malloc(sizeof(t_exec));
-		if (!cmd)
+	cmd = malloc(sizeof(t_exec));
+	if (!cmd)
 		return (NULL);
 	cmd->cmd_path = NULL;
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
@@ -94,4 +101,3 @@ int	main(int argc, char **argv, char **envp)
 	get_next_line(-42);
 	return (0);
 }
-

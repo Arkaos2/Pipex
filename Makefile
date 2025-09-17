@@ -1,33 +1,50 @@
-NAME = pipex
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: miltavar <miltavar@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/06/12 13:17:19 by miltavar          #+#    #+#              #
+#    Updated: 2025/07/09 09:56:42 by miltavar         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-SRCS = main.c check_arg.c child.c pipex_bonus.c pipes.c
-OBJS = $(SRCS:.c=.o)
+NAME		= pipex
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror -Ilibft/includes -Iincludes
 
-LIBFT_DIR = libft
-LIBFT_A = $(LIBFT_DIR)/libft.a
+SRCS		= main.c child.c pipes.c pipex_bonus.c check_arg.c
+BONUS_SRC	= pipex_bonus.c pipex.c main.c child.c pipes.c check_arg.c
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -I$(LIBFT_DIR)
+OBJS		= $(SRCS:.c=.o)
+BONUS_OBJ	= $(BONUS_SRC:.c=.o)
 
-all: $(LIBFT_A) $(NAME)
+LIBFT_PATH	= ./libft
+LIBFT		= $(LIBFT_PATH)/libft.a
 
-$(LIBFT_A):
-	$(MAKE) -C $(LIBFT_DIR)
+all: $(NAME)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_A) -o $(NAME)
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
-%.o: %.c pipex.h
+bonus: $(BONUS_OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) $(BONUS_OBJ) $(LIBFT) -o $(NAME)
+
+$(LIBFT):
+	@$(MAKE) -C $(LIBFT_PATH)
+
+%.o: %.c includes/pipex.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS)
-	$(MAKE) -C $(LIBFT_DIR) clean
+	@rm -f $(OBJS) $(BONUS_OBJ)
+	@$(MAKE) -C $(LIBFT_PATH) clean
 
 fclean: clean
-	rm -f $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	@rm -f $(NAME)
+	@$(MAKE) -C $(LIBFT_PATH) fclean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus

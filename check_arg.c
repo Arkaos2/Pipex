@@ -73,29 +73,21 @@ char	*build_and_check(char **argv, int cmd_index, char **envp)
 	char	**paths;
 	char	**cmd;
 	char	*result;
-	int i;
 
 	if (!argv[cmd_index] || argv[cmd_index][0] == '\0')
-	{
-   		ft_putstr_fd("Erreur : commande vide\n", 2);
-   	 	return NULL;
-	}
+		return (ft_putstr_fd("Invalid command\n", 2), NULL);
 	paths = get_path(envp);
-	cmd = cmd_split(argv, cmd_index);
-	if (!paths || !cmd || !cmd[0])
-	{
-		free_split(cmd);
-		free_split(paths);
+	if (!paths)
 		return (NULL);
+	cmd = cmd_split(argv, cmd_index);
+	if (!cmd || !cmd[0])
+	{
+		if (!cmd[0])
+			free_split(cmd);
+		return (free_split(paths), NULL);
 	}
-	for (i = 0; cmd[i]; i++)
-		ft_printf("cmd[%d]: %s\n", i, cmd[i]);
 	result = try_paths_for_cmd(paths, cmd);
 	if (!result)
-		ft_putstr_fd(": command not found\n", 2);
-	free_split(cmd);
-	free_split(paths);
-	return (result);
+		perror(cmd[0]);
+	return (free_split(cmd), free_split(paths), result);
 }
-
-

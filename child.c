@@ -26,7 +26,7 @@ void	exec_child(t_exec *cmd, char **envp)
 		exit(127);
 	if (!cmd->cmd_args[0] || cmd->cmd_args[0][0] == '\0')
 	{
-		ft_putstr_fd("Erreur : commande vide\n", 2);
+		ft_putstr_fd("Invalid command\n", 2);
 		exit(1);
 	}
 	execve(cmd->cmd_path, cmd->cmd_args, envp);
@@ -59,7 +59,7 @@ int	prepare_cmd(t_exec *cmd, char **envp, char ***old_args_ptr, char **old_path)
 		return (0);
 	if (!args_split[0] || args_split[0][0] == '\0')
 	{
-		ft_putstr_fd("Erreur : commande vide\n", 2);
+		ft_putstr_fd("Invalid Command\n", 2);
 		free_split(args_split);
 		return (0);
 	}
@@ -77,14 +77,6 @@ int	prepare_cmd(t_exec *cmd, char **envp, char ***old_args_ptr, char **old_path)
 	return (1);
 }
 
-void	handle_empty_cmd(int fd_in, int fd_out)
-{
-	if (fd_in != STDIN_FILENO)
-		close(fd_in);
-	if (fd_out != STDOUT_FILENO)
-		close(fd_out);
-}
-
 void	run_single_cmd(t_exec *cmd, int fd_in, int fd_out, char **envp)
 {
 	char	*old_path;
@@ -92,11 +84,10 @@ void	run_single_cmd(t_exec *cmd, int fd_in, int fd_out, char **envp)
 
 	cmd->fd_in = fd_in;
 	cmd->fd_out = fd_out;
-
 	if (!prepare_cmd(cmd, envp, &old_args, &old_path))
 	{
 		handle_empty_cmd(fd_in, fd_out);
-		return;
+		return ;
 	}
 	fork_cmd_child(cmd, envp);
 	if (fd_in != STDIN_FILENO)
@@ -109,31 +100,3 @@ void	run_single_cmd(t_exec *cmd, int fd_in, int fd_out, char **envp)
 		free(cmd->cmd_path);
 	cmd->cmd_path = old_path;
 }
-
-void	launch_commands(t_exec *cmd, int **pipes, int fd_out, char **envp)
-{
-	int	i;
-	int	cur_in;
-	int	cur_out;
-
-	cur_in = cmd->fd_in;
-	i = 0;
-	while (i < cmd->nb_cmd)
-	{
-		if (i < cmd->nb_cmd - 1)
-			cur_out = pipes[i][1];
-		else
-			cur_out = fd_out;
-		if (i > 0)
-			cur_in = pipes[i - 1][0];
-		cmd->current = i;
-		cmd->fd_in = cur_in;
-		cmd->fd_out = cur_out;
-		run_single_cmd(cmd, cur_in, cur_out, envp);
-		if (i < cmd->nb_cmd - 1)
-			cur_in = pipes[i][0];
-		i++;
-	}
-}
-
-

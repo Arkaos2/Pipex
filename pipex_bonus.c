@@ -1,35 +1,60 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/17 15:25:03 by saibelab          #+#    #+#             */
+/*   Updated: 2025/09/17 15:25:03 by saibelab         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
+
+static int	process_heredoc_line(char *line, char *limiter, int pipefd)
+{
+	size_t	len;
+
+	len = ft_strlen(limiter);
+	if (len > 0 && !ft_strncmp(line, limiter, len) && line[len] == '\n')
+	{
+		free(line);
+		return (1);
+	}
+	write(pipefd, line, ft_strlen(line));
+	free(line);
+	return (0);
+}
+
+static void	cleanup_heredoc(int *pipefd)
+{
+	close(pipefd[1]);
+	close(pipefd[0]);
+	get_next_line(-42);
+}
 
 int	here_doc_input(char *limiter)
 {
 	int		pipefd[2];
 	char	*line;
-	size_t	len;
 
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
 		return (-1);
 	}
-	len = ft_strlen(limiter);
 	while (1)
 	{
 		write(1, "heredoc> ", 9);
 		line = get_next_line(0);
 		if (!line)
 		{
-			close(pipefd[1]);
-			close(pipefd[0]);
-			get_next_line(-42);
+			cleanup_heredoc(pipefd);
 			return (-1);
 		}
-		if (len > 0 && !ft_strncmp(line, limiter, len) && line[len] == '\n')
-		{
-			free(line);
-			break;
-		}
-		write(pipefd[1], line, ft_strlen(line));
-		free(line);
+		if (process_heredoc_line(line, limiter, pipefd[1]))
+			break ;
 	}
 	return (close(pipefd[1]), pipefd[0]);
 }

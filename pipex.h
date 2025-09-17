@@ -44,7 +44,7 @@ void	handle_empty_cmd(int fd_in, int fd_out);
 void	run_single_cmd(t_exec *cmd, int fd_in, int fd_out, char **envp);
 void	launch_commands(t_exec *cmd, int **pipes, int fd_out, char **envp);
 void	run_pipes(t_exec *cmd, int fd_in, int fd_out, char **envp);
-void free_cmd(t_exec *cmd);
+void	free_cmd(t_exec *cmd);
 
 int		**create_pipes(int nb_cmd);
 void	free_pipes(int **pipes, int nb_cmd);
