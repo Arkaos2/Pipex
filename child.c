@@ -100,3 +100,29 @@ void	run_single_cmd(t_exec *cmd, int fd_in, int fd_out, char **envp)
 		free(cmd->cmd_path);
 	cmd->cmd_path = old_path;
 }
+
+void	launch_commands(t_exec *cmd, int **pipes, int fd_out, char **envp)
+{
+	int	i;
+	int	cur_in;
+	int	cur_out;
+
+	cur_in = cmd->fd_in;
+	i = 0;
+	while (i < cmd->nb_cmd)
+	{
+		if (i < cmd->nb_cmd - 1)
+			cur_out = pipes[i][1];
+		else
+			cur_out = fd_out;
+		if (i > 0)
+			cur_in = pipes[i - 1][0];
+		cmd->current = i;
+		cmd->fd_in = cur_in;
+		cmd->fd_out = cur_out;
+		run_single_cmd(cmd, cur_in, cur_out, envp);
+		if (i < cmd->nb_cmd - 1)
+			cur_in = pipes[i][0];
+		i++;
+	}
+}
