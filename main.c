@@ -34,7 +34,7 @@ int	open_infile_outfile(char **argv, int argc, int *fd_in, int *fd_out)
 
 int	open_files(char **argv, int argc, int *fd_in, int *fd_out)
 {
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+	if (ft_strcmp(argv[1], "here_doc") == 0)
 		return (open_here_doc(argv, argc, fd_in, fd_out));
 	else
 		return (open_infile_outfile(argv, argc, fd_in, fd_out));
@@ -61,7 +61,7 @@ t_exec	*prepare_exec(char **argv, int argc)
 	if (!cmd)
 		return (NULL);
 	cmd->cmd_path = NULL;
-	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
+	if (ft_strcmp(argv[1], "here_doc") == 0)
 	{
 		cmd->nb_cmd = argc - 4;
 		start = 3;

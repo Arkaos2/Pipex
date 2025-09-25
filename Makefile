@@ -14,8 +14,8 @@ NAME		= pipex
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -Ilibft/includes -Iincludes
 
-SRCS		= main.c child.c pipes.c pipex_bonus.c check_arg.c
-BONUS_SRC	= pipex_bonus.c main.c child.c pipes.c check_arg.c
+SRCS		= main.c child.c pipes.c pipex_bonus.c check_arg.c check_path.c
+BONUS_SRC	= pipex_bonus.c main.c child.c pipes.c check_arg.c check_path
 
 OBJS		= $(SRCS:.c=.o)
 BONUS_OBJ	= $(BONUS_SRC:.c=.o)

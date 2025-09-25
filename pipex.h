@@ -49,6 +49,11 @@ void	free_cmd(t_exec *cmd);
 int		**create_pipes(int nb_cmd);
 void	free_pipes(int **pipes, int nb_cmd);
 
+
+int		is_absolute_path(char *cmd);
+char	*check_absolute_path(char **cmd);
+char	*search_in_path(char **cmd, char **envp);
+
 int		open_here_doc(char **argv, int argc, int *fd_in, int *fd_out);
 int		open_infile_outfile(char **argv, int argc, int *fd_in, int *fd_out);
 int		open_files(char **argv, int argc, int *fd_in, int *fd_out);

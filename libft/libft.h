@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 15:01:33 by saibelab          #+#    #+#             */
-/*   Updated: 2025/09/17 15:12:38 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/09/25 16:40:58 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int				ft_tolower(int c);
 int				ft_memcmp(const void *s1, const void *s2, size_t n);
 int				ft_lstsize(t_list *lst);
 int				find_newline(char *str);
+int				ft_strcmp(const char *s1, const char *s2);
 
 char			*ft_strnstr(const char *str, const char *to_find, size_t n);
 char			*ft_strdup(const char *s);

@@ -22,72 +22,24 @@ char	**cmd_split(char **argv, int i)
 	return (args);
 }
 
-char	**get_path(char **envp)
-{
-	int		i;
-	char	*path_value;
-	char	**paths;
-
-	if (!envp)
-		return (NULL);
-	i = 0;
-	while (envp[i] && ft_strncmp(envp[i], "PATH=", 5) != 0)
-		i++;
-	if (!envp[i])
-		return (NULL);
-	path_value = envp[i] + 5;
-	if (!path_value || path_value[0] == '\0')
-		return (NULL);
-	paths = ft_split(path_value, ':');
-	if (!paths)
-		return (NULL);
-	return (paths);
-}
-
-char	*try_paths_for_cmd(char **paths, char **cmd)
-{
-	char	*tmp;
-	char	*correct;
-	int		i;
-
-	i = 0;
-	while (paths[i])
-	{
-		tmp = ft_strjoin(paths[i], "/");
-		if (!tmp)
-			break ;
-		correct = ft_strjoin(tmp, cmd[0]);
-		free(tmp);
-		if (!correct)
-			break ;
-		if (access(correct, X_OK) == 0)
-			return (correct);
-		free(correct);
-		i++;
-	}
-	return (NULL);
-}
-
 char	*build_and_check(char **argv, int cmd_index, char **envp)
 {
-	char	**paths;
 	char	**cmd;
 	char	*result;
 
 	if (!argv[cmd_index] || argv[cmd_index][0] == '\0')
 		return (ft_putstr_fd("Invalid command\n", 2), NULL);
-	paths = get_path(envp);
-	if (!paths)
-		return (NULL);
 	cmd = cmd_split(argv, cmd_index);
 	if (!cmd || !cmd[0])
 	{
-		if (!cmd[0])
+		if (cmd && !cmd[0])
 			free_split(cmd);
-		return (free_split(paths), NULL);
+		return (NULL);
 	}
-	result = try_paths_for_cmd(paths, cmd);
-	if (!result)
-		perror(cmd[0]);
-	return (free_split(cmd), free_split(paths), result);
+	if (is_absolute_path(cmd[0]))
+		result = check_absolute_path(cmd);
+	else
+		result = search_in_path(cmd, envp);
+	free_split(cmd);
+	return (result);
 }

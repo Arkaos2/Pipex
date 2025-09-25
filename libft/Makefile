@@ -6,7 +6,7 @@
 #    By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/12 15:01:45 by saibelab          #+#    #+#              #
-#    Updated: 2025/07/02 14:42:10 by saibelab         ###   ########.fr        #
+#    Updated: 2025/09/25 16:40:46 by saibelab         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ ft_strdup.c \
 ft_strlcat.c \
 ft_strlcpy.c \
 ft_strlen.c \
+ft_strcmp.c \
 ft_strncmp.c \
 ft_strnstr.c \
 ft_strrchr.c \
