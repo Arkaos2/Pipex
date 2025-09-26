@@ -22,7 +22,7 @@ char	**cmd_split(char **argv, int i)
 	return (args);
 }
 
-char	*build_and_check(char **argv, int cmd_index, char **envp)
+char	*build_and_check(char **argv, int cmd_index, char **envp, char *infile)
 {
 	char	**cmd;
 	char	*result;
@@ -37,9 +37,9 @@ char	*build_and_check(char **argv, int cmd_index, char **envp)
 		return (NULL);
 	}
 	if (is_absolute_path(cmd[0]))
-		result = check_absolute_path(cmd);
+		result = check_absolute_path(cmd, infile);
 	else
-		result = search_in_path(cmd, envp);
+		result = search_in_path(cmd, envp, infile);
 	free_split(cmd);
 	return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 16:55:25 by saibelab          #+#    #+#             */
-/*   Updated: 2025/09/25 16:58:29 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/09/26 19:17:49 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	is_absolute_path(char *cmd)
 	return (0);
 }
 
-char	*check_absolute_path(char **cmd)
+char	*check_absolute_path(char **cmd, char *infile)
 {
 	char	*result;
 
@@ -75,13 +75,17 @@ char	*check_absolute_path(char **cmd)
 		result = ft_strdup(cmd[0]);
 	else
 	{
-		perror(cmd[0]);
+		if (access(infile, R_OK) == 0)
+		{
+			ft_putstr_fd(cmd[0], 2);
+			ft_putstr_fd(": command not found\n", 2);
+		}
 		result = NULL;
 	}
 	return (result);
 }
 
-char	*search_in_path(char **cmd, char **envp)
+char	*search_in_path(char **cmd, char **envp, char *infile)
 {
 	char	**paths;
 	char	*result;
@@ -90,8 +94,11 @@ char	*search_in_path(char **cmd, char **envp)
 	if (!paths)
 		return (NULL);
 	result = try_paths_for_cmd(paths, cmd);
-	if (!result)
-		perror(cmd[0]);
+	if (!result && access(infile, R_OK) == 0)
+	{
+		ft_putstr_fd(cmd[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+	}
 	free_split(paths);
 	return (result);
 }

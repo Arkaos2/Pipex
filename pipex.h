@@ -31,9 +31,10 @@ typedef struct s_exec
 	int		current;
 	char	*cmd_path;
 	char	**cmd_args;
+	char	*infile;
 }	t_exec;
 
-char	*build_and_check(char **argv, int cmd_index, char **envp);
+char	*build_and_check(char **argv, int cmd_index, char **envp, char *infile);
 char	**cmd_split(char **argv, int i);
 void	free_cmd(t_exec *cmd);
 
@@ -51,8 +52,8 @@ void	free_pipes(int **pipes, int nb_cmd);
 
 
 int		is_absolute_path(char *cmd);
-char	*check_absolute_path(char **cmd);
-char	*search_in_path(char **cmd, char **envp);
+char	*check_absolute_path(char **cmd, char *infile);
+char	*search_in_path(char **cmd, char **envp, char *infile);
 
 int		open_here_doc(char **argv, int argc, int *fd_in, int *fd_out);
 int		open_infile_outfile(char **argv, int argc, int *fd_in, int *fd_out);

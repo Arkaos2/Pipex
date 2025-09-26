@@ -20,7 +20,10 @@ int	open_infile_outfile(char **argv, int argc, int *fd_in, int *fd_out)
 		perror(argv[1]);
 		*fd_in = open("/dev/null", O_RDONLY);
 		if (*fd_in < 0)
+		{
+			perror("/dev/null");
 			return (1);
+		}
 	}
 	*fd_out = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (*fd_out < 0)
@@ -61,6 +64,7 @@ t_exec	*prepare_exec(char **argv, int argc)
 	if (!cmd)
 		return (NULL);
 	cmd->cmd_path = NULL;
+	cmd->infile = argv[1];
 	if (ft_strcmp(argv[1], "here_doc") == 0)
 	{
 		cmd->nb_cmd = argc - 4;
@@ -73,10 +77,7 @@ t_exec	*prepare_exec(char **argv, int argc)
 	}
 	cmd->cmd_args = malloc(sizeof(char *) * (cmd->nb_cmd + 1));
 	if (!cmd->cmd_args)
-	{
-		free(cmd);
-		return (NULL);
-	}
+		return (free(cmd), NULL);
 	fill_cmd_args(cmd, argv, start);
 	return (cmd->cmd_args[cmd->nb_cmd] = NULL, cmd);
 }

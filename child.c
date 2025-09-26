@@ -66,7 +66,7 @@ int	prepare_cmd(t_exec *cmd, char **envp, char ***old_args_ptr, char **old_path)
 	*old_args_ptr = cmd->cmd_args;
 	*old_path = cmd->cmd_path;
 	cmd->cmd_args = args_split;
-	cmd->cmd_path = build_and_check(args_split, 0, envp);
+	cmd->cmd_path = build_and_check(args_split, 0, envp, cmd->infile);
 	if (!cmd->cmd_path)
 	{
 		free_split(args_split);
